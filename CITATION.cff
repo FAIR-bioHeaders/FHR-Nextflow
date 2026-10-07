@@ -1,7 +1,7 @@
 cff-version: 1.2.0
 title: FHR-Nextflow
-message: For the FHR standard, cite the preferred paper. This local module suite has
-  no published release or assigned DOI.
+message: For the FHR standard, cite the preferred paper. This module suite has no
+  published release or assigned DOI.
 type: software
 authors:
 - given-names: David
@@ -60,3 +60,5 @@ preferred-citation:
   year: 2024
 version: 0.1.0-dev
 license: MPL-2.0
+repository-code: https://github.com/FAIR-bioHeaders/FHR-Nextflow
+url: https://github.com/FAIR-bioHeaders/FHR-Nextflow

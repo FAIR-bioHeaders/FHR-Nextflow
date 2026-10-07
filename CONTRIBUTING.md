@@ -1,6 +1,6 @@
 # Contributing
 
-This is the local prototype for [FHR-Specification issue #15](https://github.com/FAIR-bioHeaders/FHR-Specification/issues/15). There is no GitHub repository or published release yet. Develop on a focused local branch and provide a diff or commit for review. Creating a remote, publishing, or pushing requires an explicit request.
+This is the development prototype for [FHR-Specification issue #15](https://github.com/FAIR-bioHeaders/FHR-Specification/issues/15). Development is hosted in [FHR-Nextflow](https://github.com/FAIR-bioHeaders/FHR-Nextflow); there is no published release yet. Develop on a focused branch and submit a pull request for review, or commit directly to main when explicitly requested. Publishing releases or changing repository visibility requires an explicit request.
 
 Start with a use case or reproducible failure. Keep changes focused and explain the resulting behavior, compatibility implications and relevant verification. Use synthetic fixtures; exclude private genome data, credentials and unrelated formatting. Follow the [code of conduct](CODE_OF_CONDUCT.md); report sensitive findings using [SECURITY.md](SECURITY.md).
 
@@ -40,3 +40,17 @@ Use Chicago bibliography entries with DOI resolver links for human-readable cita
 Record compatibility and user-facing changes in [CHANGELOG.md](CHANGELOG.md). Suite version, converter version and schemaVersion are separate. Before a release, review dependency pins, run integration and container checks, and record the converter checkout and image digest used. Preparing a release does not authorize publication or changes to ownership. Keep cross-repository work linked to the specification issue and release tracker.
 
 Contributions to this repository are made under [MPL-2.0](LICENSE). Preserve license notices in source files and retain the licenses of external dependencies.
+
+## Compatibility and release policy
+
+The current tested combination is Nextflow 26.04.6, Java 21, Python 3.13, FHR-File-Converter 0.3.0 and FHR schemaVersion 1. These are the supported development baseline; newer Nextflow versions allowed by the manifest are not automatically verified. Other converters or schema versions require explicit compatibility review and passing integration tests before being declared supported. Older suite releases have no maintenance or long-term support commitment.
+
+Suite versions describe this module API independently of converter releases and schemaVersion:
+
+- **Patch:** compatible bug fixes, documentation corrections or environment updates that preserve channel contracts, metadata semantics and supported inputs.
+- **Minor:** additive modules, optional inputs or outputs, or newly tested compatibility combinations that preserve existing consumers.
+- **Major:** changes that break existing tuple contracts, remove modules or supported inputs, change output semantics, or drop a supported runtime combination. Document migration instructions.
+
+During the initial `0.x` development series, breaking changes increment the minor version and include migration notes; compatible fixes increment the patch version. `0.1.0-dev` is an unreleased development identifier, not an issued release. The first stable `1.0.0` release establishes the stable API policy above.
+
+A converter or schema upgrade is reviewed on its actual effect on consumers, rather than automatically matching the dependency's version number. Do not silently change checksum semantics. Record tested combinations in README and CHANGELOG, update environment pins and version guards together, and run the integration harness plus converter tests and the container example. Pin the resulting container digest and record the converter source commit for release verification. Publish a version tag and release notes only when authorized. This project's release lifecycle is independent of the companion schema/converter release.

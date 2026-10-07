@@ -25,7 +25,7 @@ workflow {
 
 This is a composition fragment: define `records` in the consuming workflow before using it. Set `nextflow.enable.dsl = 2` in that project's config. For several assemblies, pair each validated JSON with its corresponding sequence by a stable sample ID rather than relying on channel arrival order. Use `gfa` instead of `fasta` for GFA files.
 
-Standalone JSON requires an explicit schema-valid checksum. Attachment replaces that value with the final file checksum; downstream consumers should use `FHR_ATTACH.out.json` when referring to the attached sequence. Its checksum covers the exact file bytes except the scalar root checksum line and its terminator. It is not a checksum of sequence letters alone. A supplied `seqcol_id` is preserved, not computed or verified against sequence content.
+Standalone JSON requires an explicit schema-valid checksum. Attachment replaces that value with the final file checksum; downstream consumers should use `FHR_ATTACH.out.json` when referring to the attached sequence. The algorithm is **SHA-512/256**, not a manually truncated SHA-512 digest. Encode its 32-byte digest using standard padded base64 (44 characters), without a prefix. It covers the exact file bytes except the scalar root checksum line and its terminator; preserve line endings, whitespace, comments and all other metadata. See the [specification checksum contract](https://github.com/FAIR-bioHeaders/FHR-Specification/blob/v0.3.0/docs/FORMAT.md#checksum-decision-for-v03). It is not a checksum of sequence letters alone. A supplied `seqcol_id` is preserved, not computed or verified against sequence content.
 
 ## Run converter tests as part of a pipeline
 
