@@ -91,4 +91,12 @@ The container pins its Python base image digest, converter wheel SHA256 and dire
 
 Wright, Adam, Mark D. Wilkinson, Christopher Mungall, Scott Cain, Stephen Richards, Paul Sternberg, Ellen Provin, et al. 2024. “FAIR Header Reference Genome: A TRUSTworthy Standard.” *Briefings in Bioinformatics* 25 (3): bbae122. https://doi.org/10.1093/bib/bbae122.
 
-See [AGENTS.md](AGENTS.md) for agent guidance and [CHANGELOG.md](CHANGELOG.md) for development status.
+## Project documentation
+
+- [Pipeline guide](docs/PIPELINES.md): module composition, test integration, execution and troubleshooting.
+- [Contributing](CONTRIBUTING.md): development checks, metadata coordination and release preparation.
+- [Code of conduct](CODE_OF_CONDUCT.md) and [security policy](SECURITY.md): private reporting and independent conflict/appeal routing.
+- [Agent instructions](AGENTS.md): repository layout and implementation strategy inferred from the FHR paper.
+- [Citation metadata](CITATION.cff), [license notice](LICENSE) and [changelog](CHANGELOG.md).
+
+The license notice follows the companion FHR repositories. The suite has no published DOI; the paper citation describes the FHR standard. Schema governance remains with David and Adam until the companion successor proposal is adopted.
