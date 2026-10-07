@@ -2,6 +2,12 @@
 
 # FHR-Nextflow
 
+[![Specification checks](https://github.com/FAIR-bioHeaders/FHR-Specification/actions/workflows/validate-specification.yml/badge.svg?branch=main)](https://github.com/FAIR-bioHeaders/FHR-Specification/actions/workflows/validate-specification.yml)
+[![Schema drift checks](https://github.com/FAIR-bioHeaders/FHR-Specification/actions/workflows/check-schema-drift.yml/badge.svg?branch=main)](https://github.com/FAIR-bioHeaders/FHR-Specification/actions/workflows/check-schema-drift.yml)
+[![Converter tests](https://github.com/FAIR-bioHeaders/FHR-File-Converter/actions/workflows/pytest.yaml/badge.svg?branch=main)](https://github.com/FAIR-bioHeaders/FHR-File-Converter/actions/workflows/pytest.yaml)
+[![Specification DOI](https://img.shields.io/badge/Specification_DOI-10.5281%2Fzenodo.6762549-blue)](https://doi.org/10.5281/zenodo.6762549)
+[![File Converter DOI](https://img.shields.io/badge/File_Converter_DOI-10.5281%2Fzenodo.6762547-blue)](https://doi.org/10.5281/zenodo.6762547)
+
 Reusable Nextflow DSL2 modules for creating, converting, validating and attaching [FAIR bioHeaders](https://doi.org/10.1093/bib/bbae122). This development prototype implements [FHR-Specification issue #15](https://github.com/FAIR-bioHeaders/FHR-Specification/issues/15). The dedicated repository is [FHR-Nextflow](https://github.com/FAIR-bioHeaders/FHR-Nextflow); it has no published release.
 
 Compatibility: Nextflow **26.04.6**, Java **21**, [FHR-File-Converter](https://github.com/FAIR-bioHeaders/FHR-File-Converter) **0.3.0**, FHR schemaVersion **1**. The suite version is **0.1.0-dev**. JSON creation and channel composition are native DSL2/Groovy; the converter supplies schema validation, format conversion and file checksums.
