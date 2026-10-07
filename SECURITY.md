@@ -15,7 +15,7 @@ impact can use ordinary issues.
 
 ## Private reporting channel
 
-Email [molik+FAIRsecurityDisclosure@ksu.edu](mailto:molik+FAIRsecurityDisclosure@ksu.edu) for FHR-nextflow and the companion FHR repositories. Identify the affected repository and version. This is the maintainer-confirmed reporting address; do not assume GitHub private vulnerability reporting is enabled.
+Email [molik+FAIRsecurityDisclosure@ksu.edu](mailto:molik+FAIRsecurityDisclosure@ksu.edu) for FHR-Nextflow and the companion FHR repositories. Identify the affected repository and version. This is the maintainer-confirmed reporting address; do not assume GitHub private vulnerability reporting is enabled.
 
 Coordinate disclosure privately with the maintainers. No guaranteed response deadline is stated. If a report involves David Molik, contact [Adam Wright](mailto:adam.j.wright82+FAIRsecurityDisclosure@gmail.com) at [adam.j.wright82+FAIRsecurityDisclosure@gmail.com](mailto:adam.j.wright82+FAIRsecurityDisclosure@gmail.com) directly. If it involves Adam Wright, use David’s address above. Do not copy a maintainer involved in the report; use an uninvolved reviewer for escalation.
 

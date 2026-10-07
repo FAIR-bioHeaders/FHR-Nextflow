@@ -9,8 +9,8 @@ A record has two separate maps: `meta` carries the pipeline ID and any routing i
 The following composition consumes an existing `records` channel of `(meta, fields)` tuples and a single sequence file supplied as `params.sequence`:
 
 ```nextflow
-include { FHR_CREATE_JSON } from '/path/to/FHR-nextflow/modules/create_json/main'
-include { FHR_ATTACH } from '/path/to/FHR-nextflow/subworkflows/attach/main'
+include { FHR_CREATE_JSON } from '/path/to/FHR-Nextflow/modules/create_json/main'
+include { FHR_ATTACH } from '/path/to/FHR-Nextflow/subworkflows/attach/main'
 
 workflow {
     // Define records upstream: tuple([id: 'assembly1'], fields).
@@ -30,7 +30,7 @@ Standalone JSON requires an explicit schema-valid checksum. Attachment replaces 
 ## Run converter tests as part of a pipeline
 
 ```nextflow
-include { FHR_CONVERTER_TESTS } from '/path/to/FHR-nextflow/modules/converter_tests/main'
+include { FHR_CONVERTER_TESTS } from '/path/to/FHR-Nextflow/modules/converter_tests/main'
 
 workflow {
     FHR_CONVERTER_TESTS(Channel.value(tuple(

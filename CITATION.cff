@@ -1,5 +1,5 @@
 cff-version: 1.2.0
-title: FHR-nextflow
+title: FHR-Nextflow
 message: For the FHR standard, cite the preferred paper. This local module suite has
   no published release or assigned DOI.
 type: software
