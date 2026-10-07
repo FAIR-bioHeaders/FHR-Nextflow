@@ -1,3 +1,5 @@
+**This is a demo repository**, do not deploy. 
+
 # FHR-Nextflow
 
 Reusable Nextflow DSL2 modules for creating, converting, validating and attaching [FAIR bioHeaders](https://doi.org/10.1093/bib/bbae122). This local prototype implements [FHR-Specification issue #15](https://github.com/FAIR-bioHeaders/FHR-Specification/issues/15). It has no GitHub remote and is not a published release.
