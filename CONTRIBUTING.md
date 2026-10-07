@@ -38,3 +38,5 @@ Schema changes belong in FHR-Specification and must coordinate converter schema 
 Use Chicago bibliography entries with DOI resolver links for human-readable citations. Keep the paper, preprint, specification, converter and module suite distinct. [CITATION.cff](CITATION.cff) records the preferred FHR paper; do not assign this suite the converter's or specification's DOI.
 
 Record compatibility and user-facing changes in [CHANGELOG.md](CHANGELOG.md). Suite version, converter version and schemaVersion are separate. Before a release, review dependency pins, run integration and container checks, and record the converter checkout and image digest used. Preparing a release does not authorize publication or changes to ownership. Keep cross-repository work linked to the specification issue and release tracker.
+
+Contributions to this repository are made under [MPL-2.0](LICENSE). Preserve license notices in source files and retain the licenses of external dependencies.

@@ -6,8 +6,6 @@ type: software
 authors:
 - given-names: David
   family-names: Molik
-  email: david.molik@usda.gov
-  affiliation: USDA ARS ABADRU
   orcid: https://orcid.org/0000-0003-3192-6538
 - given-names: Adam
   family-names: Wright
@@ -61,3 +59,4 @@ preferred-citation:
   start: bbae122
   year: 2024
 version: 0.1.0-dev
+license: MPL-2.0

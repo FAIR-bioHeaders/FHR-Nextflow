@@ -17,3 +17,5 @@ Inspect module channel contracts and docs together. Native exec tasks write only
 Read README, CONTRIBUTING, SECURITY and the pipeline guide before changing their contracts. Preserve CRLF fixture bytes and sample IDs. For documentation-only changes, check relative links and examples; rerun pipelines when executable behavior changes. Update CHANGELOG with relevant verification. Keep human-readable citations in Chicago style with DOI links and machine-readable citation metadata distinct from release identifiers.
 
 David and Adam retain schema authority; the companion governance proposal is not adopted. Follow the conduct and security policies for private reporting and conflicts. Never invent a published repository URL, release date, DOI or archival record for this local prototype.
+
+This repository uses MPL-2.0. Preserve its source notices and keep CITATION.cff and README licensing consistent. Do not apply the companion repositories' USDA government-work notice to this suite. External dependencies retain their own licenses.

@@ -99,4 +99,4 @@ Wright, Adam, Mark D. Wilkinson, Christopher Mungall, Scott Cain, Stephen Richar
 - [Agent instructions](AGENTS.md): repository layout and implementation strategy inferred from the FHR paper.
 - [Citation metadata](CITATION.cff), [license notice](LICENSE) and [changelog](CHANGELOG.md).
 
-The license notice follows the companion FHR repositories. The suite has no published DOI; the paper citation describes the FHR standard. Schema governance remains with David and Adam until the companion successor proposal is adopted.
+This repository is licensed under the [Mozilla Public License 2.0](LICENSE) (`MPL-2.0`). External dependencies retain their own licenses. The suite has no published DOI; the paper citation describes the FHR standard. Schema governance remains with David and Adam until the companion successor proposal is adopted.
