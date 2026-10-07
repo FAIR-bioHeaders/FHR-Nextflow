@@ -1,0 +1,3 @@
+# Preserve CRLF fixtures exactly: attach/strip tests compare raw bytes.
+examples/*.fasta -text whitespace=cr-at-eol
+examples/*.gfa -text whitespace=cr-at-eol
