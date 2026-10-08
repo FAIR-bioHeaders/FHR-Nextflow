@@ -14,8 +14,8 @@ colorama==0.4.6 ; sys_platform == 'win32' \
     --hash=sha256:08695f5cb7ed6e0531a20572697297273c47b8cae5a63ffc6d6ed5c201be6e44 \
     --hash=sha256:4f1d9991f5acc0ca119f9d443620b77f9d6b33703e51011c16baf57afb285fc6
     # via pytest
-fhr @ https://github.com/FAIR-bioHeaders/FHR-File-Converter/releases/download/v0.3.1/fhr-0.3.1-py3-none-any.whl#sha256=11bf78c1cb5992b45a7f16f8840f4582fbe77065ec05c18aecc1cf36adbc9726 \
-    --hash=sha256:11bf78c1cb5992b45a7f16f8840f4582fbe77065ec05c18aecc1cf36adbc9726
+fhr @ https://github.com/FAIR-bioHeaders/FHR-File-Converter/releases/download/v0.3.2/fhr-0.3.2-py3-none-any.whl#sha256=8185329b3509067476681757e28eb271ae04a42e8468404b7d98aaf719d73eed \
+    --hash=sha256:8185329b3509067476681757e28eb271ae04a42e8468404b7d98aaf719d73eed
     # via -r environment/requirements.in
 fqdn==1.6.0 \
     --hash=sha256:6c793c312ccfa29981e1135b3ef5e1277ebe639731a6b0f7350d90e96e63f0b4 \

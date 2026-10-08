@@ -4,7 +4,7 @@
 # file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 # Runs the supported baseline: Nextflow 26.04.6, Java 21, Python 3.13 and
-# FHR-File-Converter 0.3.1. Actions and downloads are pinned by digest.
+# FHR-File-Converter 0.3.2. Actions and downloads are pinned by digest.
 name: CI
 
 on:
@@ -24,8 +24,8 @@ env:
   NXF_VER: 26.04.6
   # sha256 of the nextflow-26.04.6-dist release asset (self-contained launcher).
   NXF_DIST_SHA256: 182a63c74074e2dc7956ffa3c8cd59de952ed2c44394e21faf5e1736b945444c
-  # FHR-File-Converter tag v0.3.1; the commit is pinned because tags can move.
-  CONVERTER_COMMIT: ffeb6f7d70c9d5b42e29ad1c17e1d87ced1398a1
+  # FHR-File-Converter tag v0.3.2; the commit is pinned because tags can move.
+  CONVERTER_COMMIT: 506ddce063ab4ad757cebf92dc252ffb143373cf
   NXF_ANSI_LOG: 'false'
 
 jobs:
@@ -37,7 +37,7 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Check out FHR-File-Converter v0.3.1
+      - name: Check out FHR-File-Converter v0.3.2
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: FAIR-bioHeaders/FHR-File-Converter

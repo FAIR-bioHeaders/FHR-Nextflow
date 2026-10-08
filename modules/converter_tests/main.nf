@@ -6,7 +6,7 @@
 include { directoryDigest; quote; sampleId; versionCheck; versionReport } from '../utils/main'
 
 // Runs a converter checkout's pytest suite against the installed, pinned
-// converter. The checkout's declared version must be 0.3.1. It is copied into
+// converter. The checkout's declared version must be 0.3.2. It is copied into
 // the task directory, so the input directory is never modified. This process
 // succeeds even when tests fail so that the JUnit XML, log and pytest exit
 // status are always emitted; FHR_CHECK_CONVERTER_TESTS then fails the run.
@@ -39,8 +39,8 @@ process FHR_RUN_CONVERTER_TESTS {
             sys.exit(f'converter source has no {required}: {source.resolve()}')
     project = tomllib.loads((source / 'pyproject.toml').read_text(encoding='utf-8'))
     version = project.get('project', {}).get('version') or project.get('tool', {}).get('poetry', {}).get('version')
-    if version != '0.3.1':
-        sys.exit(f'converter source version is {version!r}; the pinned converter is 0.3.1')
+    if version != '0.3.2':
+        sys.exit(f'converter source version is {version!r}; the pinned converter is 0.3.2')
     shutil.copytree(source, target, symlinks=True, ignore=shutil.ignore_patterns('.git', '__pycache__', '.pytest_cache', '*.pyc'))
     PY
     set +e
