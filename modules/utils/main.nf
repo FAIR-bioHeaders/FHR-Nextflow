@@ -70,6 +70,23 @@ def jsonValue(Object value, String location) {
     throw new IllegalArgumentException("FHR field ${location} has unsupported type ${value.getClass().name}; supply strings (for example ISO 8601 'YYYY-MM-DD' dates), numbers, booleans, lists or maps")
 }
 
+def directoryDigest(Path directory) {
+    // SHA-256 over relative paths and contents of regular files, skipping VCS and
+    // Python caches. Used as a task input so -resume notices nested edits.
+    def skip = ['.git', '__pycache__', '.pytest_cache'] as Set
+    def files = []
+    directory.traverse(type: groovy.io.FileType.FILES, preDir: { dir -> dir.name in skip ? groovy.io.FileVisitResult.SKIP_SUBTREE : groovy.io.FileVisitResult.CONTINUE }, filter: { path -> !(path.name in skip) }) { path ->
+        files << directory.relativize(path).toString()
+    }
+    def digest = java.security.MessageDigest.getInstance('SHA-256')
+    files.sort().each { name ->
+        digest.update((name + '\u0000').getBytes('UTF-8'))
+        digest.update(directory.resolve(name).bytes)
+        digest.update('\u0000'.getBytes('UTF-8'))
+    }
+    return digest.digest().encodeHex().toString()
+}
+
 def versionCheck() {
     return 'fhr_version="$(fhr-convert --version || true)"; if [ "$fhr_version" != "0.3.0" ]; then echo "FHR-Nextflow requires fhr-convert 0.3.0; found \'${fhr_version:-none}\'" >&2; exit 1; fi'
 }
