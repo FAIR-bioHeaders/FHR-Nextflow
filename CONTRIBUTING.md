@@ -31,7 +31,7 @@ Keep JSON serialization and orchestration native to Nextflow. Reuse the converte
 
 Update channel contracts in README and the [pipeline guide](docs/PIPELINES.md) when inputs or outputs change. Keep examples and tests consistent. Document checksum and SeqCol semantics: the former can be computed during attachment, while the latter is supplied by the caller. Do not infer authors, accessions or software provenance.
 
-Schema changes belong in FHR-Specification and must coordinate converter schema copies, serializers, examples and mapping documentation. David Molik and Adam Wright retain schema authority. The [successor governance proposal](https://github.com/FAIR-bioHeaders/FHR-Specification/blob/main/GOVERNANCE.md) remains a proposal until explicitly adopted.
+Schema changes belong in FHR-Specification and must coordinate converter schema copies, serializers, examples and mapping documentation. David Molik and Adam Wright are the maintainers and jointly hold schema authority ([GOVERNANCE](https://github.com/FAIR-bioHeaders/FHR-Specification/blob/main/GOVERNANCE.md)); the steering-group option described there is not active.
 
 ## Documentation, citations and releases
 
