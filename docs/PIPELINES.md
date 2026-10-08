@@ -37,11 +37,17 @@ workflow {
         [id: 'converter-tests'],
         file(params.converter_source, checkIfExists: true)
     )))
-    // reports emits tuple(meta, junit_xml, test_log) after pytest succeeds.
+    // reports emits tuple(meta, junit_xml, test_log) whether or not tests pass.
+    // passed emits meta only after every test passes.
 }
 ```
 
-Provide a converter source directory containing `tests/` and `pytest.ini`, preferably the v0.3.0 checkout. The installed converter version is checked separately. The module runs that checkout's tests and emits JUnit XML plus a log. It fails the task if pytest fails; inspect the task work directory for failed-run logs. An independent test branch does not gate other workflow outputs automatically. Connect it to your release or publication dependency graph if those steps must wait for passing tests.
+Provide a converter source directory containing `pyproject.toml`, `tests/` and `pytest.ini` that declares version 0.3.0, preferably the v0.3.0 checkout; other versions are rejected, and the installed converter version is checked separately. The workflow copies the checkout into its task directory (the input is never modified and no bytecode is written), runs its tests against the installed converter (tests that invoke the checkout's own scripts use the copy), and always emits JUnit XML plus a log so that they can be published. A separate check task then fails the run if pytest failed. An independent test branch does not gate other workflow outputs automatically: combine release or publication channels with `FHR_CONVERTER_TESTS.out.passed` if those steps must wait for passing tests, as the example `main.nf` does:
+
+```nextflow
+gate = FHR_CONVERTER_TESTS.out.passed.first()
+gated = FHR_ATTACH.out.json.combine(gate).map { meta, json, _passed -> tuple(meta, json) }
+```
 
 ## Execution and publication
 
@@ -62,7 +68,7 @@ process {
 
 The native JSON writer executes in Nextflow's JVM. Command wrappers use the consumer's executor. Remote executors need access to the converter environment or an available container image; a locally built Docker tag is not automatically accessible on a cluster.
 
-Modules leave files in their task work directories. The example workflow copies successful outputs into `params.outdir`; production consumers should define their own publication rules and retain logs and version reports appropriate to their provenance needs. Use unique sample IDs and keep Nextflow work directories while downstream tasks still require them.
+Modules leave files in their task work directories. The example workflow publishes with Nextflow workflow outputs (`publish:` and `output {}`), copying results into `params.outdir` per sample ID, and withholds them until converter tests pass when `--converter_source` is given; production consumers should define their own publication rules and retain logs and version reports appropriate to their provenance needs. Use unique sample IDs and keep Nextflow work directories while downstream tasks still require them. The supplied Docker profile runs containers as the invoking user, so work files are not root-owned.
 
 ## Diagnosing failures
 
@@ -70,6 +76,7 @@ Modules leave files in their task work directories. The example workflow copies 
 - **Converter version mismatch:** install the pinned distribution or use the supplied image. Upgrade the compatibility contract and tests together before accepting another version.
 - **Checksum mismatch:** verify that no program changed the header, whitespace, line endings or sequence bytes after attachment. Reattach when changing metadata.
 - **Unsafe ID or unsupported format:** use IDs and format values from the README contract. Paths are quoted; command formats are explicitly restricted.
-- **Failed converter tests:** inspect `converter-tests.log` in the task work directory and confirm the supplied checkout matches the pinned converter.
+- **Failed converter tests:** inspect the published `converter-tests/converter-tests.log` and JUnit XML. A checkout that does not declare version 0.3.0 is rejected before tests run.
+- **JSON serialization errors:** the message names the field location, for example `$.dateCreated`; convert dates to ISO 8601 strings and remove NaN, Infinity and `null` list items.
 
 See [SECURITY.md](../SECURITY.md) for sensitive findings and [CONTRIBUTING.md](../CONTRIBUTING.md) for changes to modules or their contracts.
