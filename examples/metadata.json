@@ -34,7 +34,7 @@
   "scholarlyArticle": "10.1093/bib/bbae122",
   "funding": "funding",
   "reuseConditions": "public domain",
-  "documentation": "Synthetic fixture; checksum and SeqCol are placeholders in standalone metadata.",
+  "documentation": "Synthetic fixture; the standalone checksum is a placeholder that attachment replaces.",
   "masking": "soft-masked",
   "identifier": [
     "beetlebase:TC010103"
@@ -65,6 +65,5 @@
     "numberScaffolds": 1,
     "gcContent": 37.5,
     "readTechnology": "HiFi"
-  },
-  "seqcol_id": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+  }
 }
