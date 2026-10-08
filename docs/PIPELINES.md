@@ -42,7 +42,7 @@ workflow {
 }
 ```
 
-Provide a converter source directory containing `pyproject.toml`, `tests/` and `pytest.ini` that declares version 0.3.0, preferably the v0.3.0 checkout; other versions are rejected, and the installed converter version is checked separately. The workflow copies the checkout into its task directory (the input is never modified and no bytecode is written), runs its tests against the installed converter (tests that invoke the checkout's own scripts use the copy), and always emits JUnit XML plus a log so that they can be published. A separate check task then fails the run if pytest failed. An independent test branch does not gate other workflow outputs automatically: combine release or publication channels with `FHR_CONVERTER_TESTS.out.passed` if those steps must wait for passing tests, as the example `main.nf` does:
+Provide a converter source directory containing `pyproject.toml`, `tests/` and `pytest.ini` that declares version 0.3.1, preferably the v0.3.1 checkout; other versions are rejected, and the installed converter version is checked separately. The workflow copies the checkout into its task directory (the input is never modified and no bytecode is written), runs its tests against the installed converter (tests that invoke the checkout's own scripts use the copy), and always emits JUnit XML plus a log so that they can be published. A separate check task then fails the run if pytest failed. An independent test branch does not gate other workflow outputs automatically: combine release or publication channels with `FHR_CONVERTER_TESTS.out.passed` if those steps must wait for passing tests, as the example `main.nf` does:
 
 ```nextflow
 gate = FHR_CONVERTER_TESTS.out.passed.first()
@@ -76,7 +76,7 @@ Modules leave files in their task work directories. The example workflow publish
 - **Converter version mismatch:** install the pinned distribution or use the supplied image. Upgrade the compatibility contract and tests together before accepting another version.
 - **Checksum mismatch:** verify that no program changed the header, whitespace, line endings or sequence bytes after attachment. Reattach when changing metadata.
 - **Unsafe ID or unsupported format:** use IDs and format values from the README contract. Paths are quoted; command formats are explicitly restricted.
-- **Failed converter tests:** inspect the published `converter-tests/converter-tests.log` and JUnit XML. A checkout that does not declare version 0.3.0 is rejected before tests run.
+- **Failed converter tests:** inspect the published `converter-tests/converter-tests.log` and JUnit XML. A checkout that does not declare version 0.3.1 is rejected before tests run.
 - **JSON serialization errors:** the message names the field location, for example `$.dateCreated`; convert dates to ISO 8601 strings and remove NaN, Infinity and `null` list items.
 
 See [SECURITY.md](../SECURITY.md) for sensitive findings and [CONTRIBUTING.md](../CONTRIBUTING.md) for changes to modules or their contracts.

@@ -2,7 +2,7 @@
 
 This repository is an unreleased development prototype (`0.1.0-dev`). Security fixes
 currently target its current development branch. The tested dependency is
-FHR-File-Converter 0.3.0 with schemaVersion 1; no long-term support or
+FHR-File-Converter 0.3.1 with schemaVersion 1; no long-term support or
 response-time commitment is made. Check the companion converter's security
 policy when reporting a vulnerability in that dependency.
 

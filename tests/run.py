@@ -113,6 +113,13 @@ def main():
         bad_checksum = work / 'bad-checksum.nf'
         bad_checksum.write_text("include { FHR_VALIDATE } from '" + str(ROOT / 'modules/validate/main') + "'\nworkflow { FHR_VALIDATE(Channel.of(tuple([id:'tampered'], file(params.sequence), 'fasta'))) }\n")
         run(bad_checksum, work, ['--sequence', str(tampered)], failure='checksum')
+        # FHR lines must form the leading header block (converter 0.3.1).
+        late_header = work / 'late-header.fasta'
+        late_header.write_bytes(attached.read_bytes() + b';~documentation: after the sequence\n')
+        run(bad_checksum, work, ['--sequence', str(late_header)], failure='after sequence data')
+        concatenated = work / 'concatenated.fasta'
+        concatenated.write_bytes(attached.read_bytes() * 2)
+        run(bad_checksum, work, ['--sequence', str(concatenated)], failure='after sequence data')
 
         # Several metadata files: one output directory per file-derived ID, never shared.
         batch = work / 'batch'
@@ -163,7 +170,7 @@ def main():
             check('test_injected_failure' in (output / 'converter-tests/converter-tests.log').read_text(), 'failure missing from published log')
 
             pyproject = mutable / 'pyproject.toml'
-            pyproject.write_text(pyproject.read_text().replace('version = "0.3.0"', 'version = "0.4.0"', 1))
+            pyproject.write_text(pyproject.read_text().replace('version = "0.3.1"', 'version = "0.4.0"', 1))
             run(ROOT / 'main.nf', work, ['--converter_source', str(mutable), '--outdir', str(work / 'mismatch')], failure="converter source version is '0.4.0'")
             check(not (work / 'mismatch' / 'example').exists(), 'results published with a mismatched converter checkout')
     print(f'PASS: {len(passed)} pipeline runs and rejection cases (round trips, exact bytes, JSON edge cases, per-file IDs, publication gates).')
