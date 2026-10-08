@@ -6,7 +6,7 @@ Start with a use case or reproducible failure. Keep changes focused and explain 
 
 ## Development environment
 
-Follow [README.md](README.md) for Nextflow 26.04.6, Java 21 and the Python 3.13 converter environment. The pinned converter is 0.3.0; its schema validation is the source of truth. From this checkout:
+Follow [README.md](README.md) for Nextflow 26.04.6, Java 21 and the Python 3.13 converter environment. The pinned converter is 0.3.1; its schema validation is the source of truth. From this checkout:
 
 ```sh
 python tests/run.py
@@ -14,7 +14,7 @@ python tests/run.py --converter-source ../FHR-File-Converter
 git diff --check
 ```
 
-Use a converter v0.3.0 checkout for reproducible pytest inputs. To verify the container path:
+Use a converter v0.3.1 checkout for reproducible pytest inputs. To verify the container path:
 
 ```sh
 docker build -t fhr-nextflow:0.1.0 environment
@@ -43,7 +43,7 @@ Contributions to this repository are made under [MPL-2.0](LICENSE). Preserve lic
 
 ## Compatibility and release policy
 
-The current tested combination is Nextflow 26.04.6, Java 21, Python 3.13, FHR-File-Converter 0.3.0 and FHR schemaVersion 1. These are the supported development baseline; newer Nextflow versions allowed by the manifest are not automatically verified. Other converters or schema versions require explicit compatibility review and passing integration tests before being declared supported. Older suite releases have no maintenance or long-term support commitment.
+The current tested combination is Nextflow 26.04.6, Java 21, Python 3.13, FHR-File-Converter 0.3.1 and FHR schemaVersion 1. These are the supported development baseline; newer Nextflow versions allowed by the manifest are not automatically verified. Other converters or schema versions require explicit compatibility review and passing integration tests before being declared supported. Older suite releases have no maintenance or long-term support commitment.
 
 Suite versions describe this module API independently of converter releases and schemaVersion:
 

@@ -4,7 +4,7 @@
 
 Reusable Nextflow DSL2 modules for creating, converting, validating and attaching [FAIR bioHeaders](https://doi.org/10.1093/bib/bbae122). This development prototype implements [FHR-Specification issue #15](https://github.com/FAIR-bioHeaders/FHR-Specification/issues/15). The dedicated repository is [FHR-Nextflow](https://github.com/FAIR-bioHeaders/FHR-Nextflow); it has no published release.
 
-Compatibility: Nextflow **26.04.6**, Java **21**, [FHR-File-Converter](https://github.com/FAIR-bioHeaders/FHR-File-Converter) **0.3.0**, FHR schemaVersion **1**. The suite version is **0.1.0-dev**. JSON creation and channel composition are native DSL2/Groovy; the converter supplies schema validation, format conversion and file checksums.
+Compatibility: Nextflow **26.04.6**, Java **21**, [FHR-File-Converter](https://github.com/FAIR-bioHeaders/FHR-File-Converter) **0.3.1**, FHR schemaVersion **1**. The suite version is **0.1.0-dev**. JSON creation and channel composition are native DSL2/Groovy; the converter supplies schema validation, format conversion and file checksums.
 
 ## Run the example
 
@@ -30,7 +30,7 @@ Outputs are copied to `--outdir` (default `results`) under one directory per ID.
 
 `--metadata` accepts one JSON file or a quoted glob. Each file's ID is its name without `.fhr.json` or `.json` (the bundled example uses `example`); duplicate or unsafe IDs stop the run before anything is published. `--id SAMPLE` overrides the ID for a single file and is rejected when several files match.
 
-Add `--converter_source ../FHR-File-Converter` (a v0.3.0 checkout) to run the converter's pytest suite. Its JUnit XML and log are always published under `results/converter-tests/`. The metadata and sequence results of that run are **published only after every converter test passes**; if a test fails, the run exits non-zero and publishes only the test reports.
+Add `--converter_source ../FHR-File-Converter` (a v0.3.1 checkout) to run the converter's pytest suite. Its JUnit XML and log are always published under `results/converter-tests/`. The metadata and sequence results of that run are **published only after every converter test passes**; if a test fails, the run exits non-zero and publishes only the test reports.
 
 **Example metadata is synthetic.** Its standalone checksum is an explicit placeholder and it has no SeqCol digest. Replace all provenance and identifiers with your own inputs. Attaching a sequence replaces the checksum with its actual FHR checksum; it does not calculate or verify SeqCol identity.
 
@@ -91,7 +91,7 @@ Compatibility and versioning rules are documented in [the release policy](CONTRI
 python tests/run.py --converter-source ../FHR-File-Converter
 ```
 
-The stdlib Python harness runs native DSL2 integration tests from an external project: five metadata format round trips; FASTA/GFA attach, checksum validation and exact-byte stripping; Unicode and shell metacharacters; JSON serialization edge cases; per-file IDs for several metadata files and duplicate-ID rejection; publication without placeholder checksums; invalid fields, malformed JSON, unsafe IDs, unsupported formats and tampered file checksums. With a converter checkout it also runs the converter's pytest suite and checks that failing tests (including after `-resume`) and mismatched checkout versions withhold results while publishing reports. The checkout must declare version **0.3.0**; it is copied into the task directory, so it is never modified, and its library tests import the installed, pinned distribution (tests that run the checkout's own scripts use the copied checkout, which the version check ties to 0.3.0). [CI](.github/workflows/ci.yml) runs the harness and the Docker example.
+The stdlib Python harness runs native DSL2 integration tests from an external project: five metadata format round trips; FASTA/GFA attach, checksum validation and exact-byte stripping; Unicode and shell metacharacters; JSON serialization edge cases; per-file IDs for several metadata files and duplicate-ID rejection; publication without placeholder checksums; invalid fields, malformed JSON, unsafe IDs, unsupported formats and tampered file checksums. With a converter checkout it also runs the converter's pytest suite and checks that failing tests (including after `-resume`) and mismatched checkout versions withhold results while publishing reports. The checkout must declare version **0.3.1**; it is copied into the task directory, so it is never modified, and its library tests import the installed, pinned distribution (tests that run the checkout's own scripts use the copied checkout, which the version check ties to 0.3.1). [CI](.github/workflows/ci.yml) runs the harness and the Docker example.
 
 `environment/requirements.txt` is the single, hash-locked source of Python dependencies for the container, CI and local environments; edit `environment/requirements.in` and regenerate it with the command at its top. The container also pins its Python base image digest. Preserve the resulting image digest when sharing a reproducible pipeline. No network access is required for FHR validation after installation.
 

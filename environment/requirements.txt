@@ -14,9 +14,9 @@ colorama==0.4.6 ; sys_platform == 'win32' \
     --hash=sha256:08695f5cb7ed6e0531a20572697297273c47b8cae5a63ffc6d6ed5c201be6e44 \
     --hash=sha256:4f1d9991f5acc0ca119f9d443620b77f9d6b33703e51011c16baf57afb285fc6
     # via pytest
-fhr @ https://github.com/FAIR-bioHeaders/FHR-File-Converter/releases/download/v0.3.0/fhr-0.3.0-py3-none-any.whl#sha256=6cbd55f3fa8dc9fe5f7e0f1fb07c431589518eaa0fe50e7b381b3505d2625e62 \
-    --hash=sha256:6cbd55f3fa8dc9fe5f7e0f1fb07c431589518eaa0fe50e7b381b3505d2625e62
-    # via -r requirements.in
+fhr @ https://github.com/FAIR-bioHeaders/FHR-File-Converter/releases/download/v0.3.1/fhr-0.3.1-py3-none-any.whl#sha256=11bf78c1cb5992b45a7f16f8840f4582fbe77065ec05c18aecc1cf36adbc9726 \
+    --hash=sha256:11bf78c1cb5992b45a7f16f8840f4582fbe77065ec05c18aecc1cf36adbc9726
+    # via -r environment/requirements.in
 fqdn==1.6.0 \
     --hash=sha256:6c793c312ccfa29981e1135b3ef5e1277ebe639731a6b0f7350d90e96e63f0b4 \
     --hash=sha256:e39bf62e2a9481aa2cb780554fdfd944dd8ee5f230eb831684d539cbafed8de2
@@ -41,7 +41,7 @@ jsonschema==4.26.0 \
     --hash=sha256:0c26707e2efad8aa1bfc5b7ce170f3fccc2e4918ff85989ba9ffa9facb2be326 \
     --hash=sha256:d489f15263b8d200f8387e64b4c3a75f06629559fb73deb8fdfb525f2dab50ce
     # via
-    #   -r requirements.in
+    #   -r environment/requirements.in
     #   fhr
 jsonschema-specifications==2025.9.1 \
     --hash=sha256:98802fee3a11ee76ecaca44429fda8a41bff98b00a0f2838151b113f210cc6fe \
@@ -59,10 +59,10 @@ pygments==2.21.0 \
     --hash=sha256:2363c69b61c4a97c838da3b130dcd6468f4848992b21a82f2a63ec34377137d9 \
     --hash=sha256:610ca751c9bc2492b38eb9a38a7fbc93edbbb2d7182edaf34e66ae493dee5c8c
     # via pytest
-pytest==8.4.2 \
-    --hash=sha256:86c0d0b93306b961d58d62a4db4879f27fe25513d4b969df351abdddb3c30e01 \
-    --hash=sha256:872f880de3fc3a5bdc88a11b39c9710c3497a547cfa9320bc3c5e62fbf272e79
-    # via -r requirements.in
+pytest==9.1.1 \
+    --hash=sha256:1088fbde8f2b49d95a549a195707afa7a76a3ce9bcadc26b6d71f0ffda5fe313 \
+    --hash=sha256:37a86b45efb9a47a61a36449063e8e18d0cab3161329fc099eb21783169c4f0c
+    # via -r environment/requirements.in
 python-dateutil==2.9.0.post0 \
     --hash=sha256:37dd54208da7e1cd875388217d5e00ebd4179249f90fb72437e91a35459a0ad3 \
     --hash=sha256:a8b2bc7bffae282281c8140a97d3aa9c14da0b136dfe83f850eea9a5f7470427
@@ -142,7 +142,7 @@ pyyaml==6.0.3 \
     --hash=sha256:fa160448684b4e94d80416c0fa4aac48967a969efe22931448d853ada8baf926 \
     --hash=sha256:fc09d0aa354569bc501d4e787133afc08552722d3ab34836a80547331bb5d4a0
     # via
-    #   -r requirements.in
+    #   -r environment/requirements.in
     #   fhr
 referencing==0.37.0 \
     --hash=sha256:381329a9f99628c9069361716891d34ad94af76e461dcb0335825aecc7692231 \
