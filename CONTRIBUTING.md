@@ -23,7 +23,7 @@ nextflow run main.nf -profile docker \
   --converter_source ../FHR-File-Converter
 ```
 
-The integration harness checks imports from an external DSL2 project, five metadata formats, exact-byte FASTA/GFA preservation, quoting and six invalid cases. Add a regression case when changing behavior. For documentation-only changes, verify links, examples and command names; a full pipeline rerun is unnecessary unless an executable example changes.
+The integration harness checks imports from an external DSL2 project, five metadata formats, exact-byte FASTA/GFA preservation, quoting, JSON serialization edge cases, per-file IDs, publication gates and invalid cases. It uses explicit checks, so it remains effective under `python -O`. Add a regression case when changing behavior. [CI](.github/workflows/ci.yml) runs the harness and the Docker example on the supported baseline; keep its pinned versions and action digests in step with the compatibility baseline. For documentation-only changes, verify links, examples and command names; a full pipeline rerun is unnecessary unless an executable example changes.
 
 ## Module and metadata changes
 
@@ -53,4 +53,4 @@ Suite versions describe this module API independently of converter releases and 
 
 During the initial `0.x` development series, breaking changes increment the minor version and include migration notes; compatible fixes increment the patch version. `0.1.0-dev` is an unreleased development identifier, not an issued release. The first stable `1.0.0` release establishes the stable API policy above.
 
-A converter or schema upgrade is reviewed on its actual effect on consumers, rather than automatically matching the dependency's version number. Do not silently change checksum semantics. Record tested combinations in README and CHANGELOG, update environment pins and version guards together, and run the integration harness plus converter tests and the container example. Pin the resulting container digest and record the converter source commit for release verification. Publish a version tag and release notes only when authorized. This project's release lifecycle is independent of the companion schema/converter release.
+A converter or schema upgrade is reviewed on its actual effect on consumers, rather than automatically matching the dependency's version number. Do not silently change checksum semantics. Record tested combinations in README and CHANGELOG, update `environment/requirements.in`, the regenerated hash-locked `environment/requirements.txt`, CI pins and version guards together, and run the integration harness plus converter tests and the container example. Pin the resulting container digest and record the converter source commit for release verification. Publish a version tag and release notes only when authorized. This project's release lifecycle is independent of the companion schema/converter release.
