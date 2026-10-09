@@ -57,4 +57,4 @@ A converter or schema upgrade is reviewed on its actual effect on consumers, rat
 
 ## License of contributions
 
-This repository already uses [MPL-2.0](LICENSE), consistent with the organization policy for new project work from March 2025 onward. It does not use the companion repositories’ historical USDA public-domain notice. External dependencies retain their own licenses and prior releases retain their published terms. New contributions must have the rights needed for their declared license; retain source notices.
+Contributions to this repository are made under [MPL-2.0](LICENSE). Contributors must have the rights needed to submit their contributions under that license. This repository does not use the companion repositories’ historical USDA public-domain notice. External dependencies retain their own licenses. Future releases must preserve this repository’s MPL-2.0 terms and retain source notices.

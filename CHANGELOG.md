@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- Document the MPL-2.0 transition for new project contributions from March 2025 onward, preserve historical permissions and third-party notices, and align README/package/citation licensing. No runtime behavior changes.
+- Clarify the existing MPL-2.0 policy in the README, contribution guidance and agent instructions, and add a README license badge. No runtime behavior changes.
 
 ## 0.1.0-dev
 

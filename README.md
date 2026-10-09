@@ -113,4 +113,4 @@ This repository is licensed under the [Mozilla Public License 2.0](LICENSE) (`MP
 
 [![License: MPL-2.0](https://img.shields.io/badge/License-MPL--2.0-blue.svg)](LICENSE)
 
-This repository already uses [MPL-2.0](LICENSE), consistent with the organization policy for new project work from March 2025 onward. It does not use the companion repositories’ historical USDA public-domain notice. External dependencies retain their own licenses and prior releases retain their published terms.
+This repository uses [MPL-2.0](LICENSE). It does not use the companion repositories’ historical USDA public-domain notice. External dependencies retain their own licenses. If a release is published, its release notes should state the applicable terms.
