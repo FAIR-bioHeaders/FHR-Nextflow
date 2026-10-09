@@ -19,3 +19,10 @@ Read README, CONTRIBUTING, SECURITY and the pipeline guide before changing their
 David and Adam are the maintainers and jointly hold schema authority; the steering-group option in the companion GOVERNANCE.md is not active. Follow the conduct and security policies for private reporting and conflicts. Never invent a published repository URL, release date, DOI or archival record for this development prototype.
 
 This repository uses MPL-2.0. Preserve its source notices and keep CITATION.cff and README licensing consistent. Do not apply the companion repositories' USDA government-work notice to this suite. External dependencies retain their own licenses.
+
+## Licensing policy (2026-10-09)
+
+This repository already uses MPL-2.0. Preserve its existing LICENSE and all
+third-party terms. The USDA public-domain notices in companion repositories
+do not apply here. Keep README badges and package/citation metadata consistent;
+do not rewrite historical releases or silently relicense upstream material.

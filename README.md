@@ -108,3 +108,9 @@ Wright, Adam, Mark D. Wilkinson, Christopher Mungall, Scott Cain, Stephen Richar
 - [Citation metadata](CITATION.cff), [license notice](LICENSE) and [changelog](CHANGELOG.md).
 
 This repository is licensed under the [Mozilla Public License 2.0](LICENSE) (`MPL-2.0`). External dependencies retain their own licenses. The suite has no published DOI; the paper citation describes the FHR standard. Schema governance rests with the maintainers, David and Adam ([GOVERNANCE](https://github.com/FAIR-bioHeaders/FHR-Specification/blob/main/GOVERNANCE.md)).
+
+## Licensing
+
+[![License: MPL-2.0](https://img.shields.io/badge/License-MPL--2.0-blue.svg)](LICENSE)
+
+This repository uses [MPL-2.0](LICENSE). It does not use the companion repositories’ historical USDA public-domain notice. External dependencies retain their own licenses. If a release is published, its release notes should state the applicable terms.

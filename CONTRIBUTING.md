@@ -54,3 +54,7 @@ Suite versions describe this module API independently of converter releases and 
 During the initial `0.x` development series, breaking changes increment the minor version and include migration notes; compatible fixes increment the patch version. `0.1.0-dev` is an unreleased development identifier, not an issued release. The first stable `1.0.0` release establishes the stable API policy above.
 
 A converter or schema upgrade is reviewed on its actual effect on consumers, rather than automatically matching the dependency's version number. Do not silently change checksum semantics. Record tested combinations in README and CHANGELOG, update `environment/requirements.in`, the regenerated hash-locked `environment/requirements.txt`, CI pins and version guards together, and run the integration harness plus converter tests and the container example. Pin the resulting container digest and record the converter source commit for release verification. Publish a version tag and release notes only when authorized. This project's release lifecycle is independent of the companion schema/converter release.
+
+## License of contributions
+
+Contributions to this repository are made under [MPL-2.0](LICENSE). Contributors must have the rights needed to submit their contributions under that license. This repository does not use the companion repositories’ historical USDA public-domain notice. External dependencies retain their own licenses. Future releases must preserve this repository’s MPL-2.0 terms and retain source notices.
