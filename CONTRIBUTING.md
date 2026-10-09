@@ -6,21 +6,21 @@ Start with a use case or reproducible failure. Keep changes focused and explain 
 
 ## Development environment
 
-Follow [README.md](README.md) for Nextflow 26.04.6, Java 21 and the Python 3.13 converter environment. The pinned converter is 0.3.3; its schema validation is the source of truth. From this checkout:
+Follow [README.md](README.md) for Nextflow 26.04.6, Java 21 and the Python 3.13 converter environment. The pinned converter is 0.4.0; its schema validation is the source of truth. From this checkout:
 
 ```sh
 python tests/run.py
-python tests/run.py --converter-source ../FHR-File-Converter
+python tests/run.py --converter-source ../FAIR-bioHeaders-Tools
 git diff --check
 ```
 
-Use a converter v0.3.3 checkout for reproducible pytest inputs. To verify the container path:
+Use a converter v0.4.0 checkout for reproducible pytest inputs. To verify the container path:
 
 ```sh
 docker build -t fhr-nextflow:0.1.0 environment
 nextflow run main.nf -profile docker \
   --sequence examples/assembly.gfa --sequence_format gfa \
-  --converter_source ../FHR-File-Converter
+  --converter_source ../FAIR-bioHeaders-Tools
 ```
 
 The integration harness checks imports from an external DSL2 project, five metadata formats, exact-byte FASTA/GFA preservation, quoting, JSON serialization edge cases, per-file IDs, publication gates and invalid cases. It uses explicit checks, so it remains effective under `python -O`. Add a regression case when changing behavior. [CI](.github/workflows/ci.yml) runs the harness and the Docker example on the supported baseline; keep its pinned versions and action digests in step with the compatibility baseline. For documentation-only changes, verify links, examples and command names; a full pipeline rerun is unnecessary unless an executable example changes.
@@ -43,7 +43,7 @@ Contributions to this repository are made under [MPL-2.0](LICENSE). Preserve lic
 
 ## Compatibility and release policy
 
-The current tested combination is Nextflow 26.04.6, Java 21, Python 3.13, FHR-File-Converter 0.3.3 and FHR schemaVersion 1. These are the supported development baseline; newer Nextflow versions allowed by the manifest are not automatically verified. Other converters or schema versions require explicit compatibility review and passing integration tests before being declared supported. Older suite releases have no maintenance or long-term support commitment.
+The current tested combination is Nextflow 26.04.6, Java 21, Python 3.13, FAIR-bioHeaders-Tools 0.4.0 and FHR schemaVersion 1. These are the supported development baseline; newer Nextflow versions allowed by the manifest are not automatically verified. Other converters or schema versions require explicit compatibility review and passing integration tests before being declared supported. Older suite releases have no maintenance or long-term support commitment.
 
 Suite versions describe this module API independently of converter releases and schemaVersion:
 
