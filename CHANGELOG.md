@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Document the MPL-2.0 transition for new project contributions from March 2025 onward, preserve historical permissions and third-party notices, and align README/package/citation licensing. No runtime behavior changes.
+
 ## 0.1.0-dev
 
 Initial local DSL2 suite for FHR-Specification #15: native JSON creation plus converter validation; generic conversion, metadata/checksum validation, FASTA/GFA combine/strip and converter pytest modules. Validated attach/extract subworkflow and runnable examples. Targets converter 0.3.0 and schemaVersion 1. No release has been published. The dedicated repository is https://github.com/FAIR-bioHeaders/FHR-Nextflow.
