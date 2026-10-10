@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Add the `GFF3_VALIDATE` module (FHR-Specification #71, Nextflow part), which runs the pinned gff3-validator 0.1.0 on plain, gzip or BGZF GFF3 with an optional genome FASTA (`[]` for none) and emits JSON and HTML reports, `valid` for files without errors and versions. `task.ext` sets the header mode, translation table, findings cap and `fail_on_errors` (default `true`: a file with errors fails the task; `false` emits its reports and omits it from `valid`); unreadable input (validator exit status 2) always fails. The example accepts `--gff3` (with `--gff3_genome` and `--gff3_*` options) and publishes reports under `ID/gff3/` behind the existing converter-test gate. `gff3-validator==0.1.0` joins `environment/requirements.in` and the hash-locked `requirements.txt` (its PyYAML requirement is satisfied by the existing 6.0.3 pin); the tested combination now includes it. Fixtures are byte-exact copies of gff3-validator conformance cases (commit `70f93a4`, MPL-2.0). CI runs a Docker GFF3 example. Verification: `tests/run.py --converter-source` (v0.4.0 worktree `6a71377`; 31 runs, 133 converter tests), `docker build -t fhr-nextflow:0.1.0 environment` (image `sha256:524c6ac6…9bf64b`), and the Docker GFA and GFF3 examples.
 - Clarify the existing MPL-2.0 policy in the README, contribution guidance and agent instructions, and add a README license badge. No runtime behavior changes.
 
 ## 0.1.0-dev

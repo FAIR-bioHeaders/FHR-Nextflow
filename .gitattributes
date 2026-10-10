@@ -1,3 +1,5 @@
 # Preserve CRLF fixtures exactly: attach/strip tests compare raw bytes.
 examples/*.fasta -text whitespace=cr-at-eol
 examples/*.gfa -text whitespace=cr-at-eol
+# GFF3 conformance fixtures are byte-exact copies; never convert line endings.
+tests/fixtures/gff3/* -text

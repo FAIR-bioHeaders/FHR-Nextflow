@@ -144,6 +144,62 @@ def main():
         for name in published(output):
             check(PLACEHOLDER.encode() not in (output / name).read_bytes(), f'{name} contains the placeholder checksum')
 
+        # GFF3 validation: optional genome ([]), gzip input, warnings, errors, incomplete input.
+        gff3 = ROOT / 'tests/fixtures/gff3'
+        module = "include { GFF3_VALIDATE } from '" + str(ROOT / 'modules/gff3_validate/main') + "'\n"
+        gff3_module = work / 'gff3-module.nf'
+        gff3_module.write_text(module + """workflow {
+    def fixtures = params.fixtures
+    GFF3_VALIDATE(Channel.of(
+        tuple([id: 'plain'], file("${fixtures}/genes-with-genome.gff3"), []),
+        tuple([id: 'gz'], file("${fixtures}/canonical-gene-gzip.gff3.gz"), []),
+        tuple([id: 'stop'], file("${fixtures}/bio-008-internal-stop.gff3"), file("${fixtures}/genome.fa")),
+        tuple([id: 'duplicate'], file("${fixtures}/str-001-duplicate-id.gff3"), [])
+    ).filter { meta, gff3, genome -> meta.id in params.ids.tokenize(',') })
+    GFF3_VALIDATE.out.valid.map { meta, gff3 -> "VALID ${meta.id} ${gff3.name}" }.view()
+    GFF3_VALIDATE.out.reports.map { meta, json, html -> "REPORT ${meta.id} ${json.name} ${html.name}" }.view()
+}
+""")
+        output = run(gff3_module, work, ['--fixtures', str(gff3), '--ids', 'plain,gz,stop'])
+        for sample, name in [('plain', 'genes-with-genome.gff3'), ('gz', 'canonical-gene-gzip.gff3.gz'), ('stop', 'bio-008-internal-stop.gff3')]:
+            check(f'VALID {sample} {name}' in output, f'{sample}: valid GFF3 not emitted on valid:\n{output}')
+            check(f'REPORT {sample} {sample}.gff3-validate.json {sample}.gff3-validate.html' in output, f'{sample}: reports not emitted')
+        report = json.loads(next((work / 'work').glob('*/*/stop.gff3-validate.json')).read_text())
+        check(report['valid'] and report['tool']['version'] == '0.1.0', f'unexpected genome report: {report}')
+        check([f['rule'] for f in report['findings']] == ['BIO-008'], f'expected one BIO-008 warning with the genome: {report["findings"]}')
+        check('<html' in next((work / 'work').glob('*/*/stop.gff3-validate.html')).read_text().lower(), 'HTML report missing')
+        run(gff3_module, work, ['--fixtures', str(gff3), '--ids', 'duplicate'], failure='GFF3 validation failed for str-001-duplicate-id.gff3')
+        check(any('GFF-STR-001' in path.read_text() for path in (work / 'work').glob('*/*/duplicate.gff3-validate.json')), 'failing task did not keep its JSON report')
+        bad_genome = work / 'bad-genome.nf'
+        bad_genome.write_text(module + "workflow { GFF3_VALIDATE(Channel.of(tuple([id:'stop'], file(params.gff3), file(params.genome)))) }\n")
+        run(bad_genome, work, ['--gff3', str(gff3 / 'bio-008-internal-stop.gff3'), '--genome', str(gff3 / 'str-001-duplicate-id.gff3')], failure='validation incomplete')
+        bad_id = work / 'gff3-bad-id.nf'
+        bad_id.write_text(module + "workflow { GFF3_VALIDATE(Channel.of(tuple([id:'../x'], file(params.gff3), []))) }\n")
+        run(bad_id, work, ['--gff3', str(gff3 / 'genes-with-genome.gff3')], failure='meta.id')
+        # fail_on_errors = false: invalid files emit reports but are not emitted on valid.
+        lenient = work / 'gff3-continue'
+        lenient.mkdir()
+        (lenient / 'nextflow.config').write_text('nextflow.enable.dsl = 2\nprocess { withName: GFF3_VALIDATE { ext.fail_on_errors = false } }\n')
+        output = run(gff3_module, lenient, ['--fixtures', str(gff3), '--ids', 'plain,duplicate'])
+        check('VALID plain' in output and 'VALID duplicate' not in output, f'invalid GFF3 emitted on valid:\n{output}')
+        check('REPORT duplicate duplicate.gff3-validate.json' in output, 'invalid GFF3 reports not emitted')
+
+        # Example workflow: reports published per GFF3 ID; errors fail unless --gff3_fail_on_errors false.
+        output = work / 'gff3-output'
+        run(ROOT / 'main.nf', work, ['--gff3', str(gff3 / '*.gff3*'), '--gff3_genome', str(gff3 / 'genome.fa'), '--outdir', str(output), '--gff3_fail_on_errors', 'false'])
+        expected = sorted(f'{sample}/gff3/{sample}.gff3-validate.{ext}' for sample in ['bio-008-internal-stop', 'canonical-gene-gzip', 'genes-with-genome', 'str-001-duplicate-id'] for ext in ['html', 'json'])
+        check([name for name in published(output) if '/gff3/' in name] == expected, f'unexpected GFF3 outputs: {published(output)}')
+        check(not json.loads((output / 'str-001-duplicate-id/gff3/str-001-duplicate-id.gff3-validate.json').read_text())['valid'], 'invalid GFF3 reported as valid')
+        run(ROOT / 'main.nf', work, ['--gff3', str(gff3 / 'str-001-duplicate-id.gff3'), '--outdir', str(work / 'gff3-strict')], failure='GFF3 validation failed')
+        check(not (work / 'gff3-strict/str-001-duplicate-id').exists(), 'reports published after a failing GFF3 validation')
+        run(ROOT / 'main.nf', work, ['--gff3', str(gff3 / 'genes-with-genome.gff3'), '--gff3_genome', str(work / 'missing.fa')], failure='missing.fa')
+        run(ROOT / 'main.nf', work, ['--gff3', str(gff3 / 'genes-with-genome.gff3'), '--gff3_translation_table', '11'], failure='needs a genome')
+        duplicate_gff3 = work / 'duplicate-gff3'
+        duplicate_gff3.mkdir()
+        shutil.copy(gff3 / 'genes-with-genome.gff3', duplicate_gff3 / 'sample.gff3')
+        shutil.copy(gff3 / 'canonical-gene-gzip.gff3.gz', duplicate_gff3 / 'sample.gff3.gz')
+        run(ROOT / 'main.nf', work, ['--gff3', str(duplicate_gff3 / '*'), '--outdir', str(work / 'gff3-duplicate')], failure='Duplicate meta.id from GFF3 files')
+
         if args.converter_source:
             source = args.converter_source.resolve()
             before = snapshot(source)
@@ -173,7 +229,7 @@ def main():
             pyproject.write_text(pyproject.read_text().replace('version = "0.4.0"', 'version = "0.5.0"', 1))
             run(ROOT / 'main.nf', work, ['--converter_source', str(mutable), '--outdir', str(work / 'mismatch')], failure="converter source version is '0.5.0'")
             check(not (work / 'mismatch' / 'example').exists(), 'results published with a mismatched converter checkout')
-    print(f'PASS: {len(passed)} pipeline runs and rejection cases (round trips, exact bytes, JSON edge cases, per-file IDs, publication gates).')
+    print(f'PASS: {len(passed)} pipeline runs and rejection cases (round trips, exact bytes, JSON edge cases, per-file IDs, publication gates, GFF3 validation).')
 
 
 if __name__ == '__main__':

@@ -96,3 +96,52 @@ def versionReport() {
     // would defeat Nextflow's script indentation stripping.
     return 'printf "fhr: %s\\n" "$(fhr-convert --version)" > versions.yml'
 }
+
+def gff3VersionCheck() {
+    return 'gff3_version="$(gff3-validate --version || true)"; if [ "$gff3_version" != "0.1.0" ]; then echo "FHR-Nextflow requires gff3-validate 0.1.0; found \'${gff3_version:-none}\'" >&2; exit 1; fi'
+}
+
+def gff3VersionReport() {
+    return 'printf "gff3-validator: %s\\n" "$(gff3-validate --version)" > versions.yml'
+}
+
+def gff3Options(Object ext, Object genome) {
+    // Builds quoted gff3-validate options from task.ext; the validator owns all
+    // GFF3 rules. Unset options use the validator defaults; fail_on_errors is
+    // handled by the module.
+    def args = []
+    def header = ext.header == null ? 'auto' : ext.header
+    if (!(header in ['auto', 'require', 'skip']))
+        throw new IllegalArgumentException("Unsupported GFF3 header mode '${header}'; expected auto, require, skip")
+    if (header == 'require')
+        args << '--require-header'
+    if (header == 'skip')
+        args << '--no-header'
+    if (genome instanceof Collection && genome.size() > 1)
+        throw new IllegalArgumentException("GFF3_VALIDATE accepts at most one genome FASTA; received ${genome.size()} files")
+    def hasGenome = !(genome instanceof Collection) || !genome.isEmpty()
+    if (hasGenome)
+        args << '--genome' << quote(genome)
+    if (ext.translation_table != null) {
+        if (!hasGenome)
+            throw new IllegalArgumentException('ext.translation_table needs a genome FASTA: the codon checks run only with --genome')
+        args << '--translation-table' << quote(positiveInteger(ext.translation_table, 'ext.translation_table'))
+    }
+    if (ext.max_findings != null)
+        args << '--max-findings' << quote(positiveInteger(ext.max_findings, 'ext.max_findings'))
+    return args.join(' ')
+}
+
+def failOnErrors(Object ext) {
+    def value = ext.fail_on_errors == null ? true : ext.fail_on_errors
+    if (!(value instanceof Boolean))
+        throw new IllegalArgumentException("ext.fail_on_errors must be true or false; found '${value}'")
+    return value
+}
+
+def positiveInteger(Object value, String name) {
+    def text = value.toString()
+    if (!(value instanceof Number || value instanceof CharSequence) || !(text ==~ /[1-9][0-9]*/))
+        throw new IllegalArgumentException("${name} must be a positive integer; found '${value}'")
+    return text
+}

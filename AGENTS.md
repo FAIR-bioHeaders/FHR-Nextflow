@@ -2,7 +2,7 @@
 
 This DSL2 module suite implements FHR-Specification issue #15 in https://github.com/FAIR-bioHeaders/FHR-Nextflow. Commit or push only within the user-authorized scope; publication of a release or a visibility change requires an explicit request.
 
-Keep orchestration and JSON creation native to Nextflow. `modules/utils/main.nf` performs serialization, filename checks and shell quoting; it is not a second schema validator. Use the pinned converter for field validation, conversion and exact-byte checksums. Required FHR fields and schemaVersion semantics belong to the companion specification.
+Keep orchestration and JSON creation native to Nextflow. `modules/utils/main.nf` performs serialization, filename checks and shell quoting; it is not a second schema validator. Use the pinned converter for field validation, conversion and exact-byte checksums, and the pinned gff3-validate (0.1.0) for GFF3 rules; never reimplement either. Required FHR fields and schemaVersion semantics belong to the companion specification.
 
 The FHR paper (https://doi.org/10.1093/bib/bbae122) motivates provenance preservation, minimal required metadata and interoperable serializations. Interpreting those goals here: pass sample IDs through channels, never invent authors/software/accessions/SeqCol digests, preserve sequence bytes, and validate before exposing outputs downstream.
 

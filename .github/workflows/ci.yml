@@ -3,8 +3,8 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-# Runs the supported baseline: Nextflow 26.04.6, Java 21, Python 3.13 and
-# FAIR-bioHeaders-Tools 0.4.0. Actions and downloads are pinned by digest.
+# Runs the supported baseline: Nextflow 26.04.6, Java 21, Python 3.13,
+# FAIR-bioHeaders-Tools 0.4.0 and gff3-validator 0.1.0. Actions and downloads are pinned by digest.
 name: CI
 
 on:
@@ -84,5 +84,15 @@ jobs:
             --converter_source converter --outdir "$RUNNER_TEMP/results"
           test -s "$RUNNER_TEMP/results/example/sequence/example.fhr.gfa"
           test -s "$RUNNER_TEMP/results/converter-tests/converter-tests.xml"
+
+      - name: Docker GFF3 example
+        env:
+          NXF_OFFLINE: 'true'
+        run: |
+          nextflow run main.nf -profile docker \
+            --gff3 'tests/fixtures/gff3/*.gff3' --gff3_genome tests/fixtures/gff3/genome.fa \
+            --gff3_fail_on_errors false --outdir "$RUNNER_TEMP/gff3-results"
+          test -s "$RUNNER_TEMP/gff3-results/bio-008-internal-stop/gff3/bio-008-internal-stop.gff3-validate.json"
+          test -s "$RUNNER_TEMP/gff3-results/str-001-duplicate-id/gff3/str-001-duplicate-id.gff3-validate.html"
 
       - run: git diff --check HEAD

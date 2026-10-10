@@ -7,6 +7,7 @@ include { FHR_CREATE_JSON } from './modules/create_json/main'
 include { FHR_CONVERT } from './modules/convert/main'
 include { FHR_ATTACH } from './subworkflows/attach/main'
 include { FHR_CONVERTER_TESTS } from './modules/converter_tests/main'
+include { GFF3_VALIDATE } from './modules/gff3_validate/main'
 include { isSampleId } from './modules/utils/main'
 
 // One record per metadata file. --id names the output of a single file;
@@ -25,6 +26,21 @@ def metadataIdProblem(List sources) {
     def duplicates = sources.groupBy { source -> metadataId(source) }.findAll { id, group -> group.size() > 1 }
     if (duplicates)
         return 'Duplicate meta.id from metadata files: ' + duplicates.collect { id, group -> "${id} (${group.join(', ')})" }.join('; ')
+    return null
+}
+
+// One record per --gff3 file; its ID is the file name without .gff3/.gff and .gz.
+def gff3Id(Path source) {
+    return source.name.replaceFirst(/\.(gff3|gff)(\.gz)?$/, '')
+}
+
+def gff3IdProblem(List sources) {
+    def invalid = sources.find { source -> !isSampleId(gff3Id(source)) }
+    if (invalid)
+        return "Invalid meta.id '${gff3Id(invalid)}' for ${invalid}: meta.id must contain only letters, digits, dot, underscore or hyphen, starting with a letter or digit; rename the GFF3 file"
+    def duplicates = sources.groupBy { source -> gff3Id(source) }.findAll { id, group -> group.size() > 1 }
+    if (duplicates)
+        return 'Duplicate meta.id from GFF3 files: ' + duplicates.collect { id, group -> "${id} (${group.join(', ')})" }.join('; ')
     return null
 }
 
@@ -56,6 +72,18 @@ workflow {
     final_json = params.sequence ? FHR_ATTACH.out.json : FHR_CREATE_JSON.out.json
     FHR_CONVERT(final_json.map { meta, json -> tuple(meta, json, 'yaml') })
 
+    // With --gff3, each file is validated (optionally against --gff3_genome); see
+    // the gff3_* options in nextflow.config. Reports are published per ID.
+    def genome = params.gff3_genome ? file(params.gff3_genome, checkIfExists: true) : []
+    GFF3_VALIDATE(params.gff3
+        ? channel.fromPath(params.gff3, checkIfExists: true).toSortedList().flatMap { sources ->
+            def problem = gff3IdProblem(sources)
+            if (problem)
+                throw new IllegalArgumentException(problem)
+            sources.collect { source -> tuple([id: gff3Id(source)], source, genome) }
+        }
+        : channel.empty())
+
     // With --converter_source, results are published only after converter tests
     // pass. Test reports are published either way and failing tests fail the run.
     FHR_CONVERTER_TESTS(params.converter_source
@@ -65,10 +93,14 @@ workflow {
     results = final_json.mix(FHR_CONVERT.out.converted, FHR_ATTACH.out.sequence)
         .combine(gate)
         .map { meta, path, _passed -> tuple(meta, path) }
+    gff3_reports = GFF3_VALIDATE.out.reports
+        .combine(gate)
+        .flatMap { meta, json, html, _passed -> [tuple(meta, json), tuple(meta, html)] }
 
     publish:
     metadata = params.sequence ? channel.empty() : results
     sequence = params.sequence ? results : channel.empty()
+    gff3 = gff3_reports
     converter_tests = FHR_CONVERTER_TESTS.out.reports
 }
 
@@ -78,6 +110,9 @@ output {
     }
     sequence {
         path { meta, path -> path >> "${meta.id}/sequence/${path.name}" }
+    }
+    gff3 {
+        path { meta, path -> path >> "${meta.id}/gff3/${path.name}" }
     }
     converter_tests {
         path 'converter-tests'

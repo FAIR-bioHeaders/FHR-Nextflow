@@ -2,11 +2,11 @@
 
 This is the development prototype for [FHR-Specification issue #15](https://github.com/FAIR-bioHeaders/FHR-Specification/issues/15). Development is hosted in [FHR-Nextflow](https://github.com/FAIR-bioHeaders/FHR-Nextflow); there is no published release yet. Develop on a focused branch and submit a pull request for review, or commit directly to main when explicitly requested. Publishing releases or changing repository visibility requires an explicit request.
 
-Start with a use case or reproducible failure. Keep changes focused and explain the resulting behavior, compatibility implications and relevant verification. Use synthetic fixtures; exclude private genome data, credentials and unrelated formatting. Follow the [code of conduct](CODE_OF_CONDUCT.md); report sensitive findings using [SECURITY.md](SECURITY.md).
+Start with a use case or reproducible failure. Keep changes focused and explain the resulting behavior, compatibility implications and relevant verification. Use synthetic fixtures (GFF3 fixtures are byte-exact copies from the gff3-validator conformance suite; see [their source note](tests/fixtures/gff3/README.md)); exclude private genome data, credentials and unrelated formatting. Follow the [code of conduct](CODE_OF_CONDUCT.md); report sensitive findings using [SECURITY.md](SECURITY.md).
 
 ## Development environment
 
-Follow [README.md](README.md) for Nextflow 26.04.6, Java 21 and the Python 3.13 converter environment. The pinned converter is 0.4.0; its schema validation is the source of truth. From this checkout:
+Follow [README.md](README.md) for Nextflow 26.04.6, Java 21 and the Python 3.13 converter environment. The pinned converter is 0.4.0; its schema validation is the source of truth. GFF3 rules belong to the pinned gff3-validator 0.1.0. From this checkout:
 
 ```sh
 python tests/run.py
@@ -21,6 +21,9 @@ docker build -t fhr-nextflow:0.1.0 environment
 nextflow run main.nf -profile docker \
   --sequence examples/assembly.gfa --sequence_format gfa \
   --converter_source ../FAIR-bioHeaders-Tools
+nextflow run main.nf -profile docker \
+  --gff3 'tests/fixtures/gff3/*.gff3' --gff3_genome tests/fixtures/gff3/genome.fa \
+  --gff3_fail_on_errors false
 ```
 
 The integration harness checks imports from an external DSL2 project, five metadata formats, exact-byte FASTA/GFA preservation, quoting, JSON serialization edge cases, per-file IDs, publication gates and invalid cases. It uses explicit checks, so it remains effective under `python -O`. Add a regression case when changing behavior. [CI](.github/workflows/ci.yml) runs the harness and the Docker example on the supported baseline; keep its pinned versions and action digests in step with the compatibility baseline. For documentation-only changes, verify links, examples and command names; a full pipeline rerun is unnecessary unless an executable example changes.
@@ -43,7 +46,7 @@ Contributions to this repository are made under [MPL-2.0](LICENSE). Preserve lic
 
 ## Compatibility and release policy
 
-The current tested combination is Nextflow 26.04.6, Java 21, Python 3.13, FAIR-bioHeaders-Tools 0.4.0 and FHR schemaVersion 1. These are the supported development baseline; newer Nextflow versions allowed by the manifest are not automatically verified. Other converters or schema versions require explicit compatibility review and passing integration tests before being declared supported. Older suite releases have no maintenance or long-term support commitment.
+The current tested combination is Nextflow 26.04.6, Java 21, Python 3.13, FAIR-bioHeaders-Tools 0.4.0, gff3-validator 0.1.0 and FHR schemaVersion 1. These are the supported development baseline; newer Nextflow versions allowed by the manifest are not automatically verified. Other converters or schema versions require explicit compatibility review and passing integration tests before being declared supported. Older suite releases have no maintenance or long-term support commitment.
 
 Suite versions describe this module API independently of converter releases and schemaVersion:
 
