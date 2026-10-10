@@ -49,9 +49,50 @@ gate = FHR_CONVERTER_TESTS.out.passed.first()
 gated = FHR_ATTACH.out.json.combine(gate).map { meta, json, _passed -> tuple(meta, json) }
 ```
 
+## Validate GFF3 annotations
+
+```nextflow
+include { GFF3_VALIDATE } from '/path/to/FHR-Nextflow/modules/gff3_validate/main'
+
+workflow {
+    GFF3_VALIDATE(Channel.of(
+        tuple([id: 'annotation1'], file(params.gff3, checkIfExists: true), []),
+        tuple([id: 'annotation2'], file(params.gff3_with_genome, checkIfExists: true), file(params.genome, checkIfExists: true))
+    ))
+    // reports emits tuple(meta, json, html) whenever validation completes.
+    // valid emits tuple(meta, gff3) only for files with no errors.
+}
+```
+
+| Input | Meaning |
+| --- | --- |
+| `meta` | Map with a safe `id`; reports are named `ID.gff3-validate.json` and `ID.gff3-validate.html` |
+| `gff3_path` | GFF3 file, plain, gzip or BGZF |
+| genome | `[]` for none, or one FASTA (plain or gzip) for the BIO-* sequence checks |
+
+| `task.ext` option | Default | Effect |
+| --- | --- | --- |
+| `header` | `auto` | `require` or `skip` the FAIR-bioHeaders GFF3 header checks |
+| `translation_table` | validator default (1) | NCBI table for codon checks; needs a genome |
+| `max_findings` | validator default (10000) | Cap on reported findings; counts stay complete |
+| `fail_on_errors` | `true` | `false` emits reports for files with errors and continues, omitting them from `valid` |
+
+The default stops the pipeline on a file with errors, because downstream steps should not consume an invalid annotation silently; the task error shows the first findings and the reports remain in the task work directory. Set `fail_on_errors = false` to survey a batch and decide later, then route only `GFF3_VALIDATE.out.valid` downstream. Warnings and notes (such as BIO-008, an in-frame stop codon) never fail. An unreadable GFF3 or genome, or an invalid option, makes the validation incomplete (exit status 2) and always fails. Configure options per process, or per record with a closure such as `ext.translation_table = { meta.translation_table }`:
+
+```groovy
+process {
+    withName: GFF3_VALIDATE {
+        ext.header = 'skip'
+        ext.fail_on_errors = false
+    }
+}
+```
+
+The validator checks only the rules its catalogue marks as implemented; the JSON report lists the layers it skipped. Each file is validated twice (JSON, then HTML), so allow for twice the validator runtime on large files.
+
 ## Execution and publication
 
-Converter processes have the label `fhr`. Configuration from this repository does not accompany imports into another project. With the supplied image built locally, a consumer can configure:
+Converter and GFF3 validation processes have the label `fhr`. Configuration from this repository does not accompany imports into another project. With the supplied image built locally, a consumer can configure:
 
 ```groovy
 nextflow.enable.dsl = 2
@@ -76,6 +117,7 @@ Modules leave files in their task work directories. The example workflow publish
 - **Converter version mismatch:** install the pinned distribution or use the supplied image. Upgrade the compatibility contract and tests together before accepting another version.
 - **Checksum mismatch:** verify that no program changed the header, whitespace, line endings or sequence bytes after attachment. Reattach when changing metadata.
 - **Unsafe ID or unsupported format:** use IDs and format values from the README contract. Paths are quoted; command formats are explicitly restricted.
+- **GFF3 validation failed:** read the findings in the task error or the JSON/HTML report in the task work directory; with `fail_on_errors = false` the reports are emitted instead. An "incomplete" failure means the GFF3 or genome could not be read.
 - **Failed converter tests:** inspect the published `converter-tests/converter-tests.log` and JUnit XML. A checkout that does not declare version 0.4.0 is rejected before tests run.
 - **JSON serialization errors:** the message names the field location, for example `$.dateCreated`; convert dates to ISO 8601 strings and remove NaN, Infinity and `null` list items.
 
