@@ -88,7 +88,7 @@ def directoryDigest(Path directory) {
 }
 
 def versionCheck() {
-    return 'fhr_version="$(fhr-convert --version || true)"; if [ "$fhr_version" != "0.4.0" ]; then echo "FHR-Nextflow requires fhr-convert 0.4.0; found \'${fhr_version:-none}\'" >&2; exit 1; fi'
+    return 'fhr_version="$(fhr-convert --version || true)"; if [ "$fhr_version" != "0.5.0" ]; then echo "FHR-Nextflow requires fhr-convert 0.5.0; found \'${fhr_version:-none}\'" >&2; exit 1; fi'
 }
 
 def versionReport() {

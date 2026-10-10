@@ -4,5 +4,5 @@
 jsonschema[format]==4.26.0
 PyYAML==6.0.3
 pytest==9.1.1
-https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Tools/releases/download/v0.4.0/fair_bioheaders-0.4.0-py3-none-any.whl#sha256=e7a6af4dc2d2e19a3a47f84f093c56864449cbb4e405020323907ba069ceab08
+https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Tools/releases/download/v0.5.0/fair_bioheaders-0.5.0-py3-none-any.whl#sha256=7c2123a1463b4ffbc76cfedea54d8e9c42103f2cc1fd7112507c8ae5b44823d9
 gff3-validator==0.1.0
