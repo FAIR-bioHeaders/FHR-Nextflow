@@ -24,8 +24,9 @@ process GFF3_VALIDATE {
 
     output:
     tuple val(meta), path("${meta.id}.gff3-validate.json"), path("${meta.id}.gff3-validate.html"), emit: reports
-    // The staged input is emitted only when the file has no errors.
-    tuple val(meta), path(gff3), emit: valid, optional: true
+    // A file with no errors is linked into valid/ by the script; only those
+    // links are emitted, so an invalid file never reaches `valid`.
+    tuple val(meta), path("valid/*"), emit: valid, optional: true
     tuple val(meta), path('versions.yml'), emit: versions
 
     script:
@@ -53,8 +54,10 @@ process GFF3_VALIDATE {
             printf 'GFF3 validation failed for %s: the file has errors (reports: %s, %s). Set ext.fail_on_errors = false to emit the reports and continue.\\n' ${name} ${json} ${html} >&2
             exit 1
         fi
-        # Continue: remove the staged link so that the optional `valid` output is not emitted.
-        rm -f -- ${input}
+        # Continue: emit the reports but do not link the file into valid/.
+    else
+        mkdir -p valid
+        ln -s ../${input} valid/
     fi
     ${gff3VersionReport()}
     """
